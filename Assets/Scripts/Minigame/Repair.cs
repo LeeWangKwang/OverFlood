@@ -23,6 +23,8 @@ public class Repair : MonoBehaviour{
     public Durability durability;
     [HideInInspector]
     public GameObject Ring;
+
+    public GameObject Nailup;
     [HideInInspector]
     public Vector2 Ring_Size;
     //_minX = -340 (_maxX*-1.55f)
@@ -95,13 +97,15 @@ public class Repair : MonoBehaviour{
     public void end()
     {
         Destroy(this.gameObject);
+        //gameObject.SetActive(false); // 미니게임을 안 보이게 한다.
+        //
     }
 
     #endregion
 
     // Use this for initialization
     void Start () {
-
+    
         durability = GameObject.Find("GameManager").GetComponent<Durability>();
         Ring_Size = new Vector2(100, 100);
 
@@ -128,12 +132,19 @@ public class Repair : MonoBehaviour{
         foreach (Vector2 position in _ring_position)
         {
             yield return new WaitForSeconds(_gamespeed);
+            GameObject nail = Instantiate(Nailup) as GameObject;
 			GameObject ring = Instantiate(Ring) as GameObject;
+
+            nail.transform.parent = transform;
+            nail.GetComponent<RectTransform>().offsetMin = position;
+            nail.GetComponent<RectTransform>().offsetMax = position + Ring_Size;
+
             ring.transform.parent = transform;
             ring.GetComponent<RectTransform>().offsetMin = position;
             ring.GetComponent<RectTransform>().offsetMax = position + Ring_Size;
             TouchRing touch = ring.GetComponent<TouchRing>();
             touch.ValueSetting(++count, level, this);
+            touch.nailup = nail;
 		}
     }
 

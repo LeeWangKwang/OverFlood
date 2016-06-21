@@ -8,6 +8,7 @@ using System;
 [RequireComponent(typeof(PlatformerMotor2D))]
 public class PlayerController2D : NetworkBehaviour
 {
+    private Animator _animator;
     private PlatformerMotor2D _motor;
     private bool _restored = true;
     private bool _enableOneWayPlatforms;
@@ -34,6 +35,8 @@ public class PlayerController2D : NetworkBehaviour
 
     void Awake()
     {
+        _animator = GetComponent<Animator>();
+
         //Triiger Mask
         for (var i = 0; i< 32; i++)
         {
@@ -47,7 +50,7 @@ public class PlayerController2D : NetworkBehaviour
     void Start()
     {
         _motor = GetComponent<PlatformerMotor2D>();
-
+        _animator.Play(Animator.StringToHash("Son_idle"));
         if (hasAuthority || isLocalPlayer) // 카메라 설정
         {
             GameObject cam = GameObject.Find("Main Camera");
@@ -138,10 +141,23 @@ public class PlayerController2D : NetworkBehaviour
         if (Mathf.Abs(Input.GetAxis(PC2D.Input.HORIZONTAL)) > PC2D.Globals.INPUT_THRESHOLD)
         {
             _motor.normalizedXMovement = Input.GetAxis(PC2D.Input.HORIZONTAL);
+
+            float valueCheck = _motor.normalizedXMovement;
+
+            //Facing
+            if (Mathf.Abs(valueCheck) >= 0.1f)
+            {
+                Vector2 newScale = transform.localScale;
+                newScale.x = Mathf.Abs(newScale.x) * ((valueCheck > 0) ? -1.0f : 1.0f);
+                transform.localScale = newScale;
+            }
+
+            _animator.Play(Animator.StringToHash("Son_walk"));
             //CmdOnMove(Input.GetAxis(PC2D.Input.HORIZONTAL));
         }
         else
         {
+            _animator.Play(Animator.StringToHash("Son_idle"));
             _motor.normalizedXMovement = 0;
             //CmdOnLand();
         }

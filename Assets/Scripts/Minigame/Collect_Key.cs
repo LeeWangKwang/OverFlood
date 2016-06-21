@@ -18,7 +18,7 @@ public class Collect_Key : MonoBehaviour {
             _collect.Matching(select);
         } else
         {
-
+            //아니면 눌러도 아무런 일이 없다.
         }
     }
 }

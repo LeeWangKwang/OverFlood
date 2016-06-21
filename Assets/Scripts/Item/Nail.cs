@@ -7,7 +7,7 @@ public class Nail : Item {
     public Nail()
     {
         name = "Nail";
-        count = 0;
+        count = 1000;
         index = 0;
     }
 }

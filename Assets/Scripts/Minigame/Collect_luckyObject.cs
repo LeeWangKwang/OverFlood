@@ -1,22 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Collect_luckyObject : MonoBehaviour {
 
-    Collect_lucky lucky; 
-    private int _index;
+    private bool _isclicked = false;
 
-    public int index
-    {
-        get
-        {
-            return _index;
-        }
-        set
-        {
-            _index = value;
-        }
-    }
+    Collect_lucky lucky;
+    public Sprite wrong_answer;
+    public Sprite answer;
 
     void Awake() {
         lucky = GameObject.Find("collect_Background").GetComponent<Collect_lucky>();
@@ -25,9 +17,29 @@ public class Collect_luckyObject : MonoBehaviour {
     /*
         서랍을 열었을 때 
     */
-    public void OnClick()
+
+    public void OnClickme(int index)
     {
-        if(!lucky.cooling)
-            lucky.Matching(index);
+        if (!_isclicked)
+        {
+            if (!lucky.cooling)
+            {
+                Debug.Log("You Click number : " + index);
+                Image image = GetComponent<Image>();
+    
+                if (lucky.Matching(index))
+                {
+                    Debug.Log("AWSOOOOOM!");
+                    image.sprite = answer;
+                }
+                else
+                {
+                    this.gameObject.GetComponent<Image>().sprite = wrong_answer;
+                }
+                transform.position = new Vector2(transform.position.x, transform.position.y - 15);
+                transform.localScale = new Vector2(1.1f, 1.5f);
+            }
+            _isclicked = true;
+        }
     }
 }

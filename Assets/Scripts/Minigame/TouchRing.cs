@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class TouchRing : MonoBehaviour {
 
     public ParticleSystem touchParticle;
     public Repair repair;
+    public GameObject nailup;
+    public Sprite naildown;
 
 	private int _index;
     private int _level;
@@ -86,6 +89,9 @@ public class TouchRing : MonoBehaviour {
 			Debug.Log ("Fail!!");
             _point = 0;
 		}
+
+        nailup.GetComponent<Image>().sprite = naildown; // 못박힌 이미지로 변경
+
 
         if (index == level * 3) // 마지막 링
         {
