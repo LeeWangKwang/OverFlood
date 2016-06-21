@@ -9,6 +9,21 @@ public class Collect : MonoBehaviour {
     private int _answer;       // 정답 인덱스
     private int _selectnum = 0;// 현재 선택된 인덱스
     private bool _collecting = false;
+    public bool _cooling = false;
+    private int _character;
+    public const int COOLTIME = 1;
+
+    public int character
+    {
+        get
+        {
+            return _character;
+        }
+        set
+        {
+            _character = value;
+        }
+    }
 
     #region Minigame
 
@@ -26,6 +41,29 @@ public class Collect : MonoBehaviour {
     public void GameStart()
     {
         _collecting = true;
+    }
+
+    public void Matching(int select)
+    {
+        if (_answer == select)
+        {
+            //Matching성공 정답
+            reward(_character);
+        }
+        else {
+            //Matching실패 쿨타임 ? 미니게임 종료?
+            _cooling = true;
+            StartCoroutine("Cool");
+        }
+    }
+
+    /*
+        쿨타임
+    */
+    IEnumerator Cool()
+    {
+        yield return new WaitForSeconds(COOLTIME);
+        _cooling = false;
     }
 
     /*
@@ -65,8 +103,4 @@ public class Collect : MonoBehaviour {
         Setting();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

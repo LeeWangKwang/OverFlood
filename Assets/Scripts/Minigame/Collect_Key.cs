@@ -13,7 +13,12 @@ public class Collect_Key : MonoBehaviour {
 
     public void OnClick()
     {
-        //선택버튼을 눌렀을 때
-        if(_collect.answer == select)
+        if (!_collect._cooling) { // 쿨 상태가 아니면
+            //선택버튼을 눌렀을 때 선택된 열쇠 값을 파라미터로 Collect에 matching()호출
+            _collect.Matching(select);
+        } else
+        {
+
+        }
     }
 }

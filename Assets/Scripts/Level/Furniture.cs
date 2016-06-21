@@ -31,7 +31,8 @@ public class Furniture : NetworkBehaviour {
         {
             if (!_iscollecting) // 이미 수리중이 아니다.
             {
-                Instantiate(_game);
+                _game = Instantiate(_game); // 미니게임 생성
+                _game.GetComponent<Collect>().character = col.GetComponent<PlayerAttribute>()._current_Family; // 미니게임중인 캐릭터 설정
             }
         }
     }
