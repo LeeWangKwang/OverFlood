@@ -53,6 +53,8 @@ namespace Prototype.NetworkLobby
 
         protected LobbyHook _lobbyHooks;
 
+        //public GameObject lobbyPlayerList;
+
         void Start()
         {
             s_Singleton = this;
@@ -326,9 +328,12 @@ namespace Prototype.NetworkLobby
         {
             //This hook allows you to apply state data from the lobby-player to the game-player
             //just subclass "LobbyHook" and add it to the lobby object.
-
+            Debug.Log("실행1");
             if (_lobbyHooks)
+            { 
                 _lobbyHooks.OnLobbyServerSceneLoadedForPlayer(this, lobbyPlayer, gamePlayer);
+                Debug.Log("실행2");
+            }
 
             return true;
         }
@@ -382,6 +387,8 @@ namespace Prototype.NetworkLobby
                 }
             }
 
+           // OnLobbyServerSceneLoadedForPlayer(lobbyPlayerList, gamePlayerPrefab);
+
             ServerChangeScene(playScene);
         }
 
@@ -391,6 +398,7 @@ namespace Prototype.NetworkLobby
         {
             base.OnClientConnect(conn);
 
+        
             infoPanel.gameObject.SetActive(false);
 
             conn.RegisterHandler(MsgKicked, KickedMessageHandler);

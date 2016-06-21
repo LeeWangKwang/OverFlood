@@ -31,11 +31,13 @@ namespace Prototype.NetworkLobby
         public string playerName = "";
         [SyncVar(hook = "OnMyColor")]
         public Color playerColor = Color.white;
+        [SyncVar(hook = "OnMyJob")]
+        public int playerJob = 0;
 
         public Color OddRowColor = new Color(250.0f / 255.0f, 250.0f / 255.0f, 250.0f / 255.0f, 1.0f);
         public Color EvenRowColor = new Color(180.0f / 255.0f, 180.0f / 255.0f, 180.0f / 255.0f, 1.0f);
 
-        static Color JoinColor = new Color(255.0f/255.0f, 0.0f, 101.0f/255.0f,1.0f);
+        static Color JoinColor = new Color(255.0f / 255.0f, 0.0f, 101.0f / 255.0f, 1.0f);
         static Color NotReadyColor = new Color(34.0f / 255.0f, 44 / 255.0f, 55.0f / 255.0f, 1.0f);
         static Color ReadyColor = new Color(0.0f, 204.0f / 255.0f, 204.0f / 255.0f, 1.0f);
         static Color TransparentColor = new Color(0, 0, 0, 0);
@@ -75,7 +77,7 @@ namespace Prototype.NetworkLobby
             //if we return from a game, color of text can still be the one for "Ready"
             readyButton.transform.GetChild(0).GetComponent<Text>().color = Color.white;
 
-           SetupLocalPlayer();
+            SetupLocalPlayer();
         }
 
         void ChangeReadyButtonColor(Color c)
@@ -119,7 +121,7 @@ namespace Prototype.NetworkLobby
 
             //have to use child count of player prefab already setup as "this.slot" is not set yet
             if (playerName == "")
-                CmdNameChanged("Player" + (LobbyPlayerList._instance.playerListContentTransform.childCount-1));
+                CmdNameChanged("Player" + (LobbyPlayerList._instance.playerListContentTransform.childCount - 1));
 
             //we switch from simple name display to name input
             colorButton.interactable = true;
@@ -179,7 +181,7 @@ namespace Prototype.NetworkLobby
         }
 
         public void OnPlayerListChanged(int idx)
-        { 
+        {
             GetComponent<Image>().color = (idx % 2 == 0) ? EvenRowColor : OddRowColor;
         }
 
@@ -196,7 +198,12 @@ namespace Prototype.NetworkLobby
             playerColor = newColor;
             colorButton.GetComponent<Image>().color = newColor;
         }
+        public void OnMyJob(int newJob)
+        {
+            playerJob = newJob;
+            roleImg.transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>(Jobs[newJob]);
 
+        }
         //===== UI Handler
 
         //Note that those handler use Command function, as we need to change the value on the server not locally
@@ -224,7 +231,7 @@ namespace Prototype.NetworkLobby
             }
             else if (isServer)
                 LobbyManager.s_Singleton.KickPlayer(connectionToClient);
-                
+
         }
 
         public void ToggleJoinButton(bool enabled)
@@ -285,12 +292,9 @@ namespace Prototype.NetworkLobby
             }
 
             playerColor = Colors[idx];
-
+            playerJob = idx;
             roleImg.transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>(Jobs[idx]);
-    //        SpriteRenderer spr = roleImg.GetComponent<SpriteRenderer>();
-   //         spr.sprite = Resources.Load<Sprite>(Jobs[idx]);
 
-    //        roleImg.GetComponent<Image>().sprite = Resources.Load<Sprite>(Jobs[idx]);
         }
 
         [Command]
