@@ -11,7 +11,8 @@ namespace Prototype.NetworkLobby
     //Any LobbyHook can then grab it and pass those value to the game player prefab (see the Pong Example in the Samples Scenes)
     public class LobbyPlayer : NetworkLobbyPlayer
     {
-        static Color[] Colors = new Color[] { Color.magenta, Color.red, Color.cyan, Color.blue, Color.green, Color.yellow };
+        static Color[] Colors = new Color[] { Color.red, Color.blue, Color.green, Color.yellow };
+        static string[] Jobs = new string[] { "Mom", "Father", "Brother", "Sister" };
         //used on server to avoid assigning the same color to two player
         static List<int> _colorInUse = new List<int>();
 
@@ -20,6 +21,7 @@ namespace Prototype.NetworkLobby
         public Button readyButton;
         public Button waitingPlayerButton;
         public Button removePlayerButton;
+        public GameObject roleImg;
 
         public GameObject localIcone;
         public GameObject remoteIcone;
@@ -283,6 +285,12 @@ namespace Prototype.NetworkLobby
             }
 
             playerColor = Colors[idx];
+
+            roleImg.transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>(Jobs[idx]);
+    //        SpriteRenderer spr = roleImg.GetComponent<SpriteRenderer>();
+   //         spr.sprite = Resources.Load<Sprite>(Jobs[idx]);
+
+    //        roleImg.GetComponent<Image>().sprite = Resources.Load<Sprite>(Jobs[idx]);
         }
 
         [Command]
